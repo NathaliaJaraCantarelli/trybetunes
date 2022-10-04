@@ -25,9 +25,9 @@ class Header extends Component {
     const { nameUser } = this.state;
     return (
       <header data-testid="header-component">
-        <p data-testid="header-user-name">
-          { nameUser !== '' ? nameUser : <Loading /> }
-        </p>
+        <div data-testid="header-user-name">
+          { nameUser !== '' ? <p>{ nameUser }</p> : <Loading /> }
+        </div>
         <Link data-testid="link-to-search" to="/search">Search</Link>
         <br />
         <Link data-testid="link-to-favorites" to="/favorites">Favorites</Link>
