@@ -80,7 +80,6 @@ class Search extends Component {
                 { artistasDaPesquisa.length === 0 ? <p>Nenhum álbum foi encontrado</p> : (
                   artistasDaPesquisa.map((artista, index) => (
                     <li key={ index }>
-                      {/* <p>{ artista.collectionName }</p> */}
                       <p>
                         <Link
                           data-testid={ `link-to-album-${artista.collectionId}` }
