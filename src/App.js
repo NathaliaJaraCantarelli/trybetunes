@@ -15,7 +15,10 @@ class App extends React.Component {
         <Switch>
           <Route exact path="/"><Login data-testid="page-login" /></Route>
           <Route path="/search"><Search data-testid="page-search" /></Route>
-          <Route path="/album/:id" render={ (props) => (<Album { ...props } data-testid="page-album" />)} />
+          <Route
+            path="/album/:id"
+            render={ (props) => (<Album { ...props } data-testid="page-album" />) }
+          />
           <Route path="/favorites"><Favorites data-testid="page-favorites" /></Route>
           <Route path="/profile/edit">
             <ProfileEdit data-testid="page-profile-edit" />
