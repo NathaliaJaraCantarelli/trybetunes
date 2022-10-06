@@ -3,7 +3,8 @@ import PropTypes from 'prop-types';
 import Header from '../components/Header';
 import getMusics from '../services/musicsAPI';
 import Loading from './Loading';
-import { addSong } from '../services/favoriteSongsAPI';
+import { addSong, getFavoriteSongs } from '../services/favoriteSongsAPI';
+import MusicCard from '../components/MusicCard';
 
 class Album extends Component {
   constructor() {
@@ -16,6 +17,24 @@ class Album extends Component {
     };
   }
 
+  async componentDidMount() {
+    await this.retornaMusicasFavoritas();
+    await this.pegaMusicas();
+  }
+
+  retornaMusicasFavoritas = async () => {
+    this.setState({ estadoRequisicao: false });
+    const favoritas = await getFavoriteSongs();
+    const favoritasFilter = favoritas
+      .filter((favoritaFilter) => typeof favoritaFilter === 'number');
+    if (favoritas) {
+      this.setState({
+        estadoRequisicao: true,
+        favorites: [...favoritasFilter],
+      });
+    }
+  };
+
   pegaMusicas = async () => {
     const { location: { pathname } } = this.props;
     const idCompleto = pathname;
@@ -24,29 +43,27 @@ class Album extends Component {
     const musicas = await getMusics(id);
     if (musicas) {
       this.setState({ arrayArtistas: musicas });
+      return true;
     }
   };
 
   addMusicaFavorita = async ({ target }) => {
-    this.setState({ estadoRequisicao: false });
     const { favorites } = this.state;
-    const favoritesList = favorites;
-    favoritesList.push(target.id);
-    await addSong();
-    this.setState({
-      estadoRequisicao: true,
-      favorites: favoritesList,
-    });
-  };
-
-  idChecked = (id) => {
-    const { favorites } = this.state;
-    return favorites.some((favorite) => favorite === id);
+    const nameId = target.name;
+    console.log(favorites);
+    const incluidoEmFavoritos = favorites
+      .some((favorite) => favorite.toString() === nameId);
+    if (incluidoEmFavoritos) {
+      const novoArray = favorites.filter((favorite) => favorite.toString() !== nameId);
+      this.setState({ favorites: novoArray });
+    } else {
+      this.setState({ favorites: [...favorites, nameId] });
+    }
+    await addSong(nameId);
   };
 
   render() {
-    this.pegaMusicas();
-    const { arrayArtistas, estadoRequisicao } = this.state;
+    const { arrayArtistas, estadoRequisicao, favorites } = this.state;
     return (
       <div data-testid="page-album">
         <Header />
@@ -59,30 +76,15 @@ class Album extends Component {
               { arrayArtistas
                 .filter((musicaFilter) => musicaFilter.trackName)
                 .map((artista, index) => (
-                  <li
+                  <MusicCard
                     key={ `music-${index}` }
-                  >
-                    { artista.trackName }
-                    <audio data-testid="audio-component" src="{previewUrl}" controls>
-                      <track kind="captions" />
-                      O seu navegador não suporta o elemento
-                      {' '}
-                      <code>audio</code>
-                    </audio>
-                    <label
-                      htmlFor="checkbox"
-                    >
-                      Favorita
-                      <input
-                        type="checkbox"
-                        name="check"
-                        id={ `id${index}` }
-                        onChange={ this.addMusicaFavorita }
-                        checked={ this.idChecked(`id${index}`) }
-                        data-testid={ `checkbox-music-${artista.trackId}` }
-                      />
-                    </label>
-                  </li>))}
+                    artista={ artista }
+                    addMusicaFavorita={ this.addMusicaFavorita }
+                    index={ index }
+                    checkedEstado={ favorites
+                      .some((favorite) => artista.trackId
+                        .toString() === favorite.toString()) }
+                  />))}
             </ul>
           </>
         ) }
