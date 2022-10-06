@@ -48,9 +48,9 @@ class Album extends Component {
   };
 
   addMusicaFavorita = async ({ target }) => {
+    this.setState({ estadoRequisicao: false });
     const { favorites } = this.state;
-    const nameId = target.name;
-    console.log(favorites);
+    const nameId = parseFloat(target.name);
     const incluidoEmFavoritos = favorites
       .some((favorite) => favorite.toString() === nameId);
     if (incluidoEmFavoritos) {
@@ -60,6 +60,7 @@ class Album extends Component {
       this.setState({ favorites: [...favorites, nameId] });
     }
     await addSong(nameId);
+    this.setState({ estadoRequisicao: true });
   };
 
   render() {
