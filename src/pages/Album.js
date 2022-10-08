@@ -18,19 +18,17 @@ class Album extends Component {
   }
 
   async componentDidMount() {
-    await this.retornaMusicasFavoritas();
     await this.pegaMusicas();
+    await this.retornaMusicasFavoritas();
   }
 
   retornaMusicasFavoritas = async () => {
     this.setState({ estadoRequisicao: false });
     const favoritas = await getFavoriteSongs();
-    const favoritasFilter = favoritas
-      .filter((favoritaFilter) => typeof favoritaFilter === 'number');
     if (favoritas) {
       this.setState({
         estadoRequisicao: true,
-        favorites: [...favoritasFilter],
+        favorites: [...favoritas],
       });
     }
   };
@@ -49,17 +47,14 @@ class Album extends Component {
 
   addMusicaFavorita = async ({ target }) => {
     this.setState({ estadoRequisicao: false });
-    const { favorites } = this.state;
-    const nameId = parseFloat(target.name);
-    const incluidoEmFavoritos = favorites
-      .some((favorite) => favorite.toString() === nameId);
-    if (incluidoEmFavoritos) {
-      const novoArray = favorites.filter((favorite) => favorite.toString() !== nameId);
-      this.setState({ favorites: novoArray });
-    } else {
-      this.setState({ favorites: [...favorites, nameId] });
+    const { arrayArtistas, favorites } = this.state;
+    const artista = arrayArtistas
+      .find((arrayArtista) => arrayArtista.trackId === parseInt(target.id, 10));
+    console.log(favorites);
+    if (target.checked === true) {
+      this.setState({ favorites: [...favorites, artista] });
     }
-    await addSong(nameId);
+    await addSong(artista);
     this.setState({ estadoRequisicao: true });
   };
 
@@ -83,8 +78,7 @@ class Album extends Component {
                     addMusicaFavorita={ this.addMusicaFavorita }
                     index={ index }
                     checkedEstado={ favorites
-                      .some((favorite) => artista.trackId
-                        .toString() === favorite.toString()) }
+                      .some((favorite) => artista.trackId === favorite.trackId) }
                   />))}
             </ul>
           </>

@@ -21,13 +21,14 @@ class MusicCard extends React.Component {
           <code>audio</code>
         </audio>
         <label
-          htmlFor="checkbox"
+          htmlFor={ artista.trackId }
         >
           Favorita
           <input
             type="checkbox"
             name={ artista.trackId }
-            id={ `id${index}` }
+            id={ artista.trackId }
+            artista={ artista }
             onChange={ addMusicaFavorita }
             checked={ checkedEstado }
             data-testid={ `checkbox-music-${artista.trackId}` }
