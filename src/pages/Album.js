@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import Header from '../components/Header';
 import getMusics from '../services/musicsAPI';
 import Loading from './Loading';
-import { addSong, getFavoriteSongs } from '../services/favoriteSongsAPI';
+import { addSong, getFavoriteSongs, removeSong } from '../services/favoriteSongsAPI';
 import MusicCard from '../components/MusicCard';
 
 class Album extends Component {
@@ -50,12 +50,15 @@ class Album extends Component {
     const { arrayArtistas, favorites } = this.state;
     const artista = arrayArtistas
       .find((arrayArtista) => arrayArtista.trackId === parseInt(target.id, 10));
-    console.log(favorites);
     if (target.checked === true) {
       this.setState({ favorites: [...favorites, artista] });
+      await addSong(artista);
+      this.setState({ estadoRequisicao: true });
+    } else {
+      await removeSong(artista);
+      await this.retornaMusicasFavoritas();
+      this.setState({ estadoRequisicao: true });
     }
-    await addSong(artista);
-    this.setState({ estadoRequisicao: true });
   };
 
   render() {
