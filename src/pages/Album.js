@@ -45,7 +45,7 @@ class Album extends Component {
     }
   };
 
-  addMusicaFavorita = async ({ target }) => {
+  addRemoveMusicaFavorita = async ({ target }) => {
     this.setState({ estadoRequisicao: false });
     const { arrayArtistas, favorites } = this.state;
     const artista = arrayArtistas
@@ -78,7 +78,7 @@ class Album extends Component {
                   <MusicCard
                     key={ `music-${index}` }
                     artista={ artista }
-                    addMusicaFavorita={ this.addMusicaFavorita }
+                    addRemoveMusicaFavorita={ this.addRemoveMusicaFavorita }
                     index={ index }
                     checkedEstado={ favorites
                       .some((favorite) => artista.trackId === favorite.trackId) }

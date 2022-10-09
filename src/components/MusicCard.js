@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 
 class MusicCard extends React.Component {
   render() {
-    const { artista, index, addMusicaFavorita, checkedEstado } = this.props;
+    const { artista, index, addRemoveMusicaFavorita, checkedEstado } = this.props;
     return (
       <li
         key={ `music-${index}` }
@@ -29,7 +29,7 @@ class MusicCard extends React.Component {
             name={ artista.trackId }
             id={ artista.trackId }
             artista={ artista }
-            onChange={ addMusicaFavorita }
+            onChange={ addRemoveMusicaFavorita }
             checked={ checkedEstado }
             data-testid={ `checkbox-music-${artista.trackId}` }
           />
@@ -46,7 +46,7 @@ MusicCard.propTypes = {
     trackId: PropTypes.number,
   }).isRequired,
   index: PropTypes.number.isRequired,
-  addMusicaFavorita: PropTypes.func.isRequired,
+  addRemoveMusicaFavorita: PropTypes.func.isRequired,
   checkedEstado: PropTypes.bool.isRequired,
 };
 
