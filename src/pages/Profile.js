@@ -21,13 +21,13 @@ class Profile extends Component {
   }
 
   retornaUsuario = async () => {
-    const teste = await getUser();
-    if (teste) {
+    const usuario = await getUser();
+    if (usuario) {
       this.setState({
-        name: teste.name,
-        email: teste.email,
-        image: teste.image,
-        description: teste.description,
+        name: usuario.name,
+        email: usuario.email,
+        image: usuario.image,
+        description: usuario.description,
       });
     }
   };

@@ -20,9 +20,14 @@ class App extends React.Component {
             render={ (props) => (<Album { ...props } data-testid="page-album" />) }
           />
           <Route path="/favorites"><Favorites data-testid="page-favorites" /></Route>
-          <Route path="/profile/edit">
-            <ProfileEdit data-testid="page-profile-edit" />
-          </Route>
+          <Route
+            path="/profile/edit"
+            render={ (props) => (
+              <ProfileEdit
+                { ...props }
+                data-testid="page-profile-edit"
+              />) }
+          />
           <Route path="/profile"><Profile data-testid="page-profile" /></Route>
           <Route path="*"><NotFound data-testid="page-not-found" /></Route>
         </Switch>
